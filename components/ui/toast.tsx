@@ -37,6 +37,8 @@ const ToastContainer = () => {
   );
 };
 
+export default ToastContainer;
+
 const ToastItem = ({ title, description, type, id }: Toast & { id: string }) => {
   const translateY = new Animated.Value(-50);
   const opacity = new Animated.Value(0);
@@ -140,5 +142,3 @@ export const toast = {
     createToast("error")("서버에 문제가 발생했습니다.", "잠시후 다시 시도해주세요"),
   scrap: () => createToast("scrap")("기사를 스크랩 목록에 담았어요 !"),
 };
-
-export default ToastContainer;
