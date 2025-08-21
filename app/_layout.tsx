@@ -22,6 +22,7 @@ export default function RootLayout() {
       <StatusBar style="light" backgroundColor="#171717" />
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: "#171717" } }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="onboarding" />
       </Stack>
       <ToastContainer />
     </SafeAreaProvider>
