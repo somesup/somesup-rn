@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { View, Animated, TouchableOpacity, Image } from "react-native";
 import { router } from "expo-router";
 import { useToastStore, Toast } from "@/lib/stores/toast";
@@ -40,8 +40,8 @@ const ToastContainer = () => {
 export default ToastContainer;
 
 const ToastItem = ({ title, description, type, id }: Toast & { id: string }) => {
-  const translateY = new Animated.Value(-50);
-  const opacity = new Animated.Value(0);
+  const translateY = useRef(new Animated.Value(-50)).current;
+  const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.parallel([
