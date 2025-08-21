@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/favicon.png",
     "userInterfaceStyle": "light",
+    "scheme": "somesup",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/favicon.png",
@@ -26,8 +27,6 @@
       "favicon": "./assets/images/favicon.png",
       "bundler": "metro"
     },
-    "plugins": [
-      "expo-router"
-    ]
+    "plugins": ["expo-router"]
   }
 }
