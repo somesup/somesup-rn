@@ -5,6 +5,9 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      fontFamily: {
+        noto: ["NotoSansKR", "system-ui", "sans-serif"],
+      },
       colors: {
         background: "#171717",
         gray: {
