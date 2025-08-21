@@ -78,7 +78,7 @@ const SignInForm = () => {
         value={formValue.phoneNumber}
         onChangeText={handlePhoneNumberInput}
         editable={step === "phoneNumber"}
-        className="mb-2"
+        className="mb-[8px]"
         keyboardType="phone-pad"
       />
 
@@ -93,7 +93,7 @@ const SignInForm = () => {
       {!errorMessage && step === "code" && (
         <TouchableOpacity
           onPress={handleClickRequestCode}
-          className="mt-2 flex-row items-center gap-1"
+          className="mt-[8px] flex-row items-center gap-[4px]"
         >
           <Text className="typography-caption">인증번호 재발송</Text>
           <MaterialIcons name="arrow-forward-ios" size={12} color="#fafafa" />
@@ -101,10 +101,14 @@ const SignInForm = () => {
       )}
 
       {errorMessage && (
-        <Text className="w-full pl-1 text-error typography-caption">{errorMessage}</Text>
+        <Text className="w-full pl-[4px] text-error typography-caption">{errorMessage}</Text>
       )}
 
-      <Button onPress={handleConfirm} className="absolute bottom-4" disabled={getConfirmDisable()}>
+      <Button
+        onPress={handleConfirm}
+        className="absolute bottom-[16px]"
+        disabled={getConfirmDisable()}
+      >
         확인
       </Button>
     </View>

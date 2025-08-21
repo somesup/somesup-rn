@@ -35,7 +35,7 @@ const OnboardingPage = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="relative flex-1 gap-14 flex-col justify-center pb-32">
+      <View className="relative flex-1 gap-[56px] flex-col justify-center pb-[128px]">
         {/* 캐러셀 */}
         <View>
           <OnboardingCarousel gap={20}>
@@ -56,7 +56,7 @@ const OnboardingPage = () => {
         </Text>
 
         {/* 버튼들 */}
-        <View className="absolute bottom-0 left-0 right-0 px-8 pb-10 gap-4">
+        <View className="absolute bottom-0 left-0 right-0 px-[32px] pb-[40px] gap-[16px]">
           <Button variant="default" onPress={() => router.push(SITEMAP.SIGN_IN)}>
             전화번호로 시작하기
           </Button>

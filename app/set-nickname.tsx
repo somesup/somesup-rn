@@ -36,8 +36,8 @@ const SetNicknamePage = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 flex-col px-8 py-4">
-        <Text className="mb-20 mt-2 text-center typography-small-title">닉네임 설정</Text>
+      <View className="flex-1 flex-col px-[32px] py-[16px]">
+        <Text className="mb-[80px] mt-[8px] text-center typography-small-title">닉네임 설정</Text>
         <View className="relative flex-1 w-full">
           <SignInInput placeholder="닉네임" value={nickname} onChangeText={handleInputChange} />
           {errorMessage && (
@@ -45,7 +45,7 @@ const SetNicknamePage = () => {
           )}
           <Button
             onPress={handleConfirm}
-            className="absolute bottom-4 left-0"
+            className="absolute bottom-[16px] left-0"
             disabled={!!errorMessage}
           >
             확인

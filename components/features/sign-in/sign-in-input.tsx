@@ -10,15 +10,11 @@ const SignInInput = ({ className, ...props }: SignInInputProps) => {
   return (
     <TextInput
       className={cn(
-        "h-[60px] w-full bg-gray-20 rounded-lg border text-[16px] border-gray-30 p-4 text-gray-60 include-font-padding",
+        "h-[60px] w-full bg-gray-20 rounded-lg border text-[16px] border-gray-30 p-[16px] text-gray-60 include-font-padding",
         className
       )}
       placeholderTextColor="#888888"
-      style={{
-        color: "#fafafa",
-        borderColor: "#374151",
-        opacity: props.editable === false ? 0.5 : 1,
-      }}
+      style={{ opacity: props.editable === false ? 0.5 : 1 }}
       {...props}
     />
   );

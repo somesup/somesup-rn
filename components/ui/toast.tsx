@@ -27,12 +27,10 @@ const ToastContainer = () => {
   const toasts = useToastStore((state) => state.toasts);
 
   return (
-    <SafeAreaView className="absolute left-0 right-0 top-0 z-40">
-      <View className="flex-col gap-2 p-4">
-        {toasts.map((t) => (
-          <ToastItem key={t.id} {...t} />
-        ))}
-      </View>
+    <SafeAreaView className="absolute flex-col gap-[12px] p-[16px] left-0 right-0 top-0 z-40">
+      {toasts.map((t) => (
+        <ToastItem key={t.id} {...t} />
+      ))}
     </SafeAreaView>
   );
 };
@@ -89,14 +87,12 @@ const ToastItem = ({ title, description, type, id }: Toast & { id: string }) => 
       >
         <TouchableOpacity
           onPress={() => router.push(SITEMAP.HIGHLIGHT)}
-          className="relative flex w-full items-start gap-3 rounded-xl bg-white p-3"
+          className="relative h-[60px] flex-row gap-[12px] w-full items-center rounded-xl bg-white px-[12px]"
         >
-          <View className="flex-row gap-3 items-center">
-            <View className="relative flex shrink-0 items-center">{toastIcon[type]}</View>
-            <View className="flex-1">
-              <Text className="typography-body1 text-gray-10">{title}</Text>
-              <Text className="typography-body2 text-gray-10">{description}</Text>
-            </View>
+          <View className="relative flex shrink-0 items-center">{toastIcon[type]}</View>
+          <View className="flex-1 flex-col justify-center gap-[6px]">
+            <Text className="typography-body1 !leading-[16px] text-gray-10">{title}</Text>
+            <Text className="typography-body2 !leading-[14px] text-gray-10">{description}</Text>
           </View>
         </TouchableOpacity>
       </Animated.View>
@@ -110,16 +106,14 @@ const ToastItem = ({ title, description, type, id }: Toast & { id: string }) => 
         opacity,
       }}
       className={[
-        "z-100 flex-row w-full items-center gap-5 rounded-lg bg-gray-20 px-4",
-        type === "scrap" ? "h-[3.25rem]" : "h-[4rem]",
+        "z-100 flex-row w-full items-center rounded-lg bg-gray-20 px-[16px] gap-[12px]",
+        type === "scrap" ? "h-[52px]" : "h-[60px]",
       ].join(" ")}
     >
-      <View className="flex-row items-center gap-5">
-        <View className="items-center justify-center">{toastIcon[type]}</View>
-        <View className="flex-1">
-          <Text className="typography-body3">{title}</Text>
-          {description && <Text className="typography-caption2">{description}</Text>}
-        </View>
+      <View className="flex w-[32px] h-[32px] items-center justify-center">{toastIcon[type]}</View>
+      <View className="flex-1">
+        <Text className="typography-body3">{title}</Text>
+        {description && <Text className="typography-caption2">{description}</Text>}
       </View>
     </Animated.View>
   );

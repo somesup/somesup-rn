@@ -43,14 +43,9 @@ const SignInInputCode = ({ value, onChangeText, timerDuration = 300 }: SignInInp
   return (
     <View className="relative w-full">
       <View className="relative">
-        <SignInInput
-          placeholder="인증번호"
-          value={value}
-          onChangeText={onChangeText}
-          className="pr-16"
-        />
+        <SignInInput placeholder="인증번호" value={value} onChangeText={onChangeText} />
         {timeLeft >= 0 && (
-          <View className="absolute right-3 top-1/2 -translate-y-1/2">
+          <View className="absolute right-[16px] top-1/2 -translate-y-1/2">
             <Text className="typography-body2">{formatTime(timeLeft)}</Text>
           </View>
         )}

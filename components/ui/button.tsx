@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import Text from "@/components/ui/text";
 
-const buttonVariants = cva("w-full flex-row items-center justify-center rounded-lg", {
+const buttonVariants = cva("w-full h-[60px] flex-row items-center justify-center rounded-lg", {
   variants: {
     variant: {
       default: "bg-gray-60",
@@ -12,9 +12,7 @@ const buttonVariants = cva("w-full flex-row items-center justify-center rounded-
       ghost: "bg-transparent",
     },
     size: {
-      sm: "px-3 py-2",
-      default: "px-4 py-3",
-      lg: "px-6 py-4",
+      default: "px-[16px]",
     },
   },
   defaultVariants: {
