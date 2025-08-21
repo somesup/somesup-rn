@@ -2,9 +2,10 @@ import "../global.css";
 import { SplashScreen, Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
+import ToastContainer from "@/components/ui/toast";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -19,21 +20,10 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <StatusBar style="light" backgroundColor="#171717" />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            backgroundColor: "#171717",
-            ...StyleSheet.create({
-              text: {
-                color: "#fafafa",
-              },
-            }).text,
-          },
-        }}
-      >
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: "#171717" } }}>
         <Stack.Screen name="index" />
       </Stack>
+      <ToastContainer />
     </SafeAreaProvider>
   );
 }
