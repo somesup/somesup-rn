@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
 
 export type Toast = {
   id: string;
@@ -15,20 +14,19 @@ export type ToastStore = {
   clear: () => void;
 };
 
-export const useToastStore = create<ToastStore>()(
-  immer((set) => ({
-    toasts: [],
-    add: (toast) =>
-      set((state) => {
-        state.toasts.push(toast);
-      }),
-    remove: (id) =>
-      set((state) => {
-        state.toasts = state.toasts.filter((t: Toast) => t.id !== id);
-      }),
-    clear: () =>
-      set((state) => {
-        state.toasts = [];
-      }),
-  }))
-);
+export const useToastStore = create<ToastStore>()((set) => ({
+  toasts: [],
+  add: (toast) =>
+    set((state) => {
+      state.toasts.push(toast);
+      return state;
+    }),
+  remove: (id) =>
+    set((state) => {
+      return { toasts: state.toasts.filter((t: Toast) => t.id !== id) };
+    }),
+  clear: () =>
+    set((state) => {
+      return { toasts: [] };
+    }),
+}));
