@@ -8,7 +8,7 @@
 
 /* React Native용 기본 텍스트 색상 */
 .text-base {
-  @apply text-gray-800;
+  @apply text-gray-60;
 }
 
 @layer utilities {

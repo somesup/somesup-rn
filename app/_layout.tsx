@@ -1,31 +1,21 @@
 import "../global.css";
-import { Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
-import { useEffect, useState } from "react";
-import * as Font from "expo-font";
+import { useFonts } from "expo-font";
+import { useEffect } from "react";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-
+  const [fontsLoaded] = useFonts({ NotoSansKR: require("@/assets/fonts/NotoSansKR.ttf") });
   useEffect(() => {
-    const loadAppFonts = async () => {
-      try {
-        await Font.loadAsync({ NotoSansKR: require("@/assets/fonts/NotoSansKR.ttf") });
-      } catch (error) {
-        console.error("Font loading failed:", error);
-      } finally {
-        setFontsLoaded(true);
-      }
-    };
+    if (fontsLoaded) SplashScreen.hideAsync();
+  }, [fontsLoaded]);
 
-    loadAppFonts();
-  }, []);
+  if (!fontsLoaded) return <View className="flex-1 bg-background" />;
 
-  if (!fontsLoaded) {
-    return <View style={{ flex: 1, backgroundColor: "#171717" }} />;
-  }
   return (
     <SafeAreaProvider>
       <StatusBar style="light" backgroundColor="#171717" />
@@ -36,7 +26,7 @@ export default function RootLayout() {
             backgroundColor: "#171717",
             ...StyleSheet.create({
               text: {
-                color: "#fafafa", // 기본 텍스트 색상
+                color: "#fafafa",
               },
             }).text,
           },

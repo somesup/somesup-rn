@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { UserDto } from "../../types/dto";
-import { Expand, SectionPreference, SectionType } from "../../types/types";
+import { UserDto } from "@/types/dto";
+import { Expand, SectionPreference, SectionType } from "@/types/types";
 
 export type User = Expand<{ user: UserDto; preferences: SectionPreference }>;
 
