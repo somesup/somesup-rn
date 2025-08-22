@@ -25,6 +25,7 @@ export default function RootLayout() {
         <Stack.Screen name="onboarding" />
         <Stack.Screen name="sign-in" />
         <Stack.Screen name="set-nickname" />
+        <Stack.Screen name="set-preferences" />
       </Stack>
       <ToastContainer />
     </SafeAreaProvider>
