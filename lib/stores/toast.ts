@@ -17,10 +17,9 @@ export type ToastStore = {
 export const useToastStore = create<ToastStore>()((set) => ({
   toasts: [],
   add: (toast) =>
-    set((state) => {
-      state.toasts.push(toast);
-      return state;
-    }),
+    set((state) => ({
+      toasts: [...state.toasts, toast],
+    })),
   remove: (id) =>
     set((state) => {
       return { toasts: state.toasts.filter((t: Toast) => t.id !== id) };

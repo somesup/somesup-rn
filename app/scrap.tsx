@@ -1,45 +1,72 @@
 import NewsAbstractView from "@/components/features/news/news-abstract-view";
 import NewsDetailView from "@/components/features/news/news-detail-view";
+import Button from "@/components/ui/button";
 import Text from "@/components/ui/text";
-import { toast } from "@/components/ui/toast";
+import { SITEMAP } from "@/data/sitemap";
 import { postArticleEvent } from "@/lib/apis/apis";
 import useFetchArticles from "@/lib/hooks/useFetchArticles";
 import useSwipeGestures from "@/lib/hooks/useSwipeGestures";
-import { useHighlightStore } from "@/lib/stores/highlight";
-import { useEffect } from "react";
+import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
+import { router, useLocalSearchParams } from "expo-router";
 import { View, Dimensions, Image, ActivityIndicator } from "react-native";
 import { GestureDetector } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const FETCH_THRESHOLD = 5;
 
-const HomePage = () => {
-  const isVisited = useHighlightStore((state) => state.isVisited);
+const ScrapPage = () => {
+  const params = useLocalSearchParams();
+  const initialIndex = params.index ? Number(params.index) : 0;
 
-  const { articles, isNextLoading, pagination, fetchNextArticles } = useFetchArticles(0);
+  const insets = useSafeAreaInsets();
+
+  const {
+    articles,
+    isNextLoading,
+    isPrevLoading,
+    pagination,
+    fetchNextArticles,
+    fetchPrevArticles,
+  } = useFetchArticles(initialIndex, {
+    scraped: true,
+  });
   const { currentIndex, animatedStyle, detailAnimatedStyle, gesture } = useSwipeGestures({
     itemsLength: articles.length + 1,
-    onItemChange: async (index: number) => {
+    onItemChange: async (index: number, goToItem: (index: number, animated?: boolean) => void) => {
       if (articles[index]?.id) postArticleEvent(articles[index].id, "VIEW");
+
       if (articles.length - index <= FETCH_THRESHOLD && !isNextLoading && pagination.hasNext)
         fetchNextArticles();
+
+      if (index <= FETCH_THRESHOLD && !isPrevLoading && pagination.hasPrev) {
+        const addedCount = await fetchPrevArticles();
+        if (addedCount > 0) goToItem(currentIndex + addedCount, false);
+      }
     },
     onDetailToggle: (index: number, isDetail: boolean) =>
       isDetail && articles[index]?.id && postArticleEvent(articles[index].id, "DETAIL_VIEW"),
+    onEndReached: () => router.push(SITEMAP.MY_PAGE_SCRAP),
   });
-
-  useEffect(() => {
-    const id = setTimeout(() => {
-      if (!isVisited()) toast.fiveNews();
-    }, 1000);
-
-    return () => clearTimeout(id);
-  }, []);
 
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View style={{ flex: 1 }}>
+        <View
+          className="absolute top-0 left-0 flex-row items-center justify-center"
+          style={{ width: screenWidth, height: 50, zIndex: 100, top: insets.top }}
+        >
+          <MaterialIcons
+            name="arrow-back"
+            size={24}
+            color="#fafafa"
+            onPress={() => router.push(SITEMAP.MY_PAGE_SCRAP)}
+            className="absolute left-4"
+          />
+          <Text className="typography-sub-title">스크랩 목록</Text>
+        </View>
+
         {/* 메인 아이템들 */}
         <Animated.View style={[{ position: "absolute", width: "100%" }, animatedStyle]}>
           {articles &&
@@ -61,14 +88,21 @@ const HomePage = () => {
               className="items-center justify-center"
               style={{ width: screenWidth, height: screenHeight }}
             >
-              <Text className="typography-sub-title">오늘의 뉴스를 모두 확인했어요 !</Text>
+              <Text className="typography-sub-title">저장한 뉴스를 모두 확인했어요!</Text>
               <Image
                 source={require("@/assets/images/thumbs-up.png")}
                 style={{ width: 280, height: 280 }}
               />
-              <Text className="!font-normal typography-small-title">
-                벌써 {articles.length}개의 소식을 읽었어요
-              </Text>
+              <Button
+                onPress={() => router.push(SITEMAP.MY_PAGE_SCRAP)}
+                className="absolute"
+                style={{
+                  bottom: insets.bottom + 20,
+                  width: screenWidth - 40,
+                }}
+              >
+                스크랩 목록으로 돌아가기
+              </Button>
             </View>
           )}
         </Animated.View>
@@ -85,4 +119,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ScrapPage;

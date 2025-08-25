@@ -1,11 +1,12 @@
 import NewsAbstractView from "@/components/features/news/news-abstract-view";
 import NewsDetailView from "@/components/features/news/news-detail-view";
 import Text from "@/components/ui/text";
-import { toast } from "@/components/ui/toast";
+import { SITEMAP } from "@/data/sitemap";
 import { postArticleEvent } from "@/lib/apis/apis";
 import useFetchArticles from "@/lib/hooks/useFetchArticles";
 import useSwipeGestures from "@/lib/hooks/useSwipeGestures";
 import { useHighlightStore } from "@/lib/stores/highlight";
+import { router } from "expo-router";
 import { useEffect } from "react";
 import { View, Dimensions, Image, ActivityIndicator } from "react-native";
 import { GestureDetector } from "react-native-gesture-handler";
@@ -14,10 +15,12 @@ import Animated from "react-native-reanimated";
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const FETCH_THRESHOLD = 5;
 
-const HomePage = () => {
-  const isVisited = useHighlightStore((state) => state.isVisited);
+const HighlightPage = () => {
+  const { setLastVisitNow } = useHighlightStore();
 
-  const { articles, isNextLoading, pagination, fetchNextArticles } = useFetchArticles(0);
+  const { articles, isNextLoading, pagination, fetchNextArticles } = useFetchArticles(0, {
+    highlight: true,
+  });
   const { currentIndex, animatedStyle, detailAnimatedStyle, gesture } = useSwipeGestures({
     itemsLength: articles.length + 1,
     onItemChange: async (index: number) => {
@@ -27,14 +30,11 @@ const HomePage = () => {
     },
     onDetailToggle: (index: number, isDetail: boolean) =>
       isDetail && articles[index]?.id && postArticleEvent(articles[index].id, "DETAIL_VIEW"),
+    onEndReached: () => router.push(SITEMAP.HOME),
   });
 
   useEffect(() => {
-    const id = setTimeout(() => {
-      if (!isVisited()) toast.fiveNews();
-    }, 1000);
-
-    return () => clearTimeout(id);
+    setLastVisitNow();
   }, []);
 
   return (
@@ -61,7 +61,7 @@ const HomePage = () => {
               className="items-center justify-center"
               style={{ width: screenWidth, height: screenHeight }}
             >
-              <Text className="typography-sub-title">오늘의 뉴스를 모두 확인했어요 !</Text>
+              <Text className="typography-sub-title">오늘의 5분 뉴스를 모두 확인했어요 !</Text>
               <Image
                 source={require("@/assets/images/thumbs-up.png")}
                 style={{ width: 280, height: 280 }}
@@ -85,4 +85,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default HighlightPage;
