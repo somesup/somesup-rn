@@ -7,7 +7,7 @@ import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ToastContainer from "@/components/ui/toast";
-import { clearExpiredTokens, getToken, removeToken } from "@/lib/utils/token";
+import { clearExpiredTokens, getToken } from "@/lib/utils/token";
 import { SITEMAP } from "@/data/sitemap";
 
 SplashScreen.preventAutoHideAsync();
@@ -57,7 +57,8 @@ export default function RootLayout() {
         <StatusBar style="light" backgroundColor="#171717" />
         <AuthMiddleware />
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: "#171717" } }}>
-          <Stack.Screen name="index" />
+          <Stack.Screen name="index" options={{ animation: "slide_from_bottom" }} />
+          <Stack.Screen name="highlight" />
           <Stack.Screen name="onboarding" />
           <Stack.Screen name="sign-in" />
           <Stack.Screen name="set-nickname" />
