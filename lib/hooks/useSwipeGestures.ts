@@ -14,14 +14,14 @@ type useSwipeGesturesProp = {
   itemsLength: number;
   onItemChange?: (index: number) => void;
   onDetailToggle?: (index: number, isDetail: boolean) => void;
-  onScrollEnd?: () => void;
+  onEndReached?: () => void;
 };
 
 const useSwipeGestures = ({
   itemsLength,
   onItemChange,
   onDetailToggle,
-  onScrollEnd,
+  onEndReached,
 }: useSwipeGesturesProp) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -85,7 +85,8 @@ const useSwipeGestures = ({
       } else {
         // 상세 뷰가 닫혀있을 때
         if (Math.abs(translationY) > 100 || Math.abs(velocityY) > 500) {
-          if (translateY.value < 0 && currentIndex === itemsLength - 1) onScrollEnd?.();
+          if (translateY.value < 0 && currentIndex === itemsLength - 1 && onEndReached)
+            runOnJS(onEndReached)();
 
           // 수직 스와이프
           if (translationY < 0 && currentIndex < itemsLength - 1) {
