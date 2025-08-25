@@ -9,7 +9,8 @@ import {
   UpdatePreferencesRequestDto,
   UpdateUserRequestDto,
 } from "@/types/dto";
-import api, { setTokens } from "./api-config";
+import api from "./api-config";
+import { setTokens } from "../utils/token";
 
 export const authPhoneRequest = async ({
   phoneNumber,
