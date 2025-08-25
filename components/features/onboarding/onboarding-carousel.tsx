@@ -1,7 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { View } from "react-native";
+import { View, Dimensions } from "react-native";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
-import useRefWidth from "@/lib/hooks/useRefWidth";
 
 type OnboardingCarouselProps = {
   gap?: number;
@@ -24,9 +23,9 @@ const OnboardingCarousel = ({
   const [currentIndex, setCurrentIndex] = useState(totalItems);
   const [isTransitioning, setIsTransitioning] = useState(true);
 
-  const containerWidth = useRefWidth(containerRef);
+  const { width: screenWidth } = Dimensions.get("window");
   const cellWidth = 200;
-  const centerOffset = containerWidth > 0 ? (containerWidth - cellWidth) / 2 : 0;
+  const centerOffset = (screenWidth - cellWidth) / 2;
   const translateX = useSharedValue(-totalItems * (cellWidth + gap));
 
   useEffect(() => {
@@ -53,13 +52,11 @@ const OnboardingCarousel = ({
   }, [currentIndex, totalItems, isTransitioning]);
 
   useEffect(() => {
-    if (containerWidth > 0) {
-      const newTranslateX = centerOffset - currentIndex * (cellWidth + gap);
-      translateX.value = withTiming(newTranslateX, {
-        duration: isTransitioning ? 400 : 0,
-      });
-    }
-  }, [currentIndex, centerOffset, cellWidth, gap, isTransitioning, translateX, containerWidth]);
+    const newTranslateX = centerOffset - currentIndex * (cellWidth + gap);
+    translateX.value = withTiming(newTranslateX, {
+      duration: isTransitioning ? 400 : 0,
+    });
+  }, [currentIndex, centerOffset, cellWidth, gap, isTransitioning, translateX]);
 
   return (
     <View ref={containerRef} className={`relative w-full overflow-hidden ${className}`}>
