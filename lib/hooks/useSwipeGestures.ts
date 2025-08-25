@@ -12,7 +12,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 type useSwipeGesturesProp = {
   itemsLength: number;
-  onItemChange?: (index: number) => void;
+  onItemChange?: (index: number, goToItem: (index: number, animated?: boolean) => void) => void;
   onDetailToggle?: (index: number, isDetail: boolean) => void;
   onEndReached?: () => void;
 };
@@ -113,8 +113,16 @@ const useSwipeGestures = ({
       }
     });
 
+  const goToItem = (index: number, animated: boolean = true) => {
+    if (index >= 0) {
+      setCurrentIndex(index);
+      if (animated) translateY.value = withSpring(-index * screenHeight, SPRING_CONFIG);
+      else translateY.value = -index * screenHeight;
+    }
+  };
+
   useEffect(() => {
-    onItemChange?.(currentIndex);
+    onItemChange?.(currentIndex, goToItem);
   }, [currentIndex]);
 
   useEffect(() => {
@@ -127,6 +135,7 @@ const useSwipeGestures = ({
     animatedStyle,
     detailAnimatedStyle,
     gesture,
+    goToItem,
   };
 };
 
