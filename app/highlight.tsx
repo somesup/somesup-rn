@@ -16,7 +16,6 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const FETCH_THRESHOLD = 5;
 
 const HighlightPage = () => {
-  console.log("HighlightPage");
   const { setLastVisitNow } = useHighlightStore();
 
   const { articles, isNextLoading, pagination, fetchNextArticles } = useFetchArticles(0, {
