@@ -30,7 +30,11 @@ const HomePage = () => {
   });
 
   useEffect(() => {
-    if (!isVisited()) toast.fiveNews();
+    const id = setTimeout(() => {
+      if (!isVisited()) toast.fiveNews();
+    }, 1000);
+
+    return () => clearTimeout(id);
   }, []);
 
   return (
