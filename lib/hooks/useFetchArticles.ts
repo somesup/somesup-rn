@@ -41,6 +41,7 @@ const useFetchArticles = (index: number, options?: Omit<ArticlesRequestDto, "cur
         pagination: newPagination,
       } = await getArticles({ cursor, ...options, limit });
 
+      if (apiError?.status === 401) return 0;
       if (apiError?.status === 404)
         return setPagination((prev) => ({ ...prev, hasNext: false })) ?? 0;
       if (apiError) return toast.serverError() ?? 0;
@@ -74,6 +75,7 @@ const useFetchArticles = (index: number, options?: Omit<ArticlesRequestDto, "cur
         limit: actualLimit,
       });
 
+      if (apiError?.status === 401) return 0;
       if (apiError?.status === 404)
         return setPagination((prev) => ({ ...prev, hasPrev: false })) ?? 0;
       if (apiError) return toast.serverError() ?? 0;
