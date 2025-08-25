@@ -6,6 +6,7 @@ import { SITEMAP } from "@/data/sitemap";
 import { postArticleEvent } from "@/lib/apis/apis";
 import useFetchArticles from "@/lib/hooks/useFetchArticles";
 import useSwipeGestures from "@/lib/hooks/useSwipeGestures";
+import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
 import { router, useLocalSearchParams } from "expo-router";
 import { View, Dimensions, Image, ActivityIndicator } from "react-native";
 import { GestureDetector } from "react-native-gesture-handler";
@@ -52,6 +53,20 @@ const ScrapPage = () => {
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View style={{ flex: 1 }}>
+        <View
+          className="absolute top-0 left-0 flex-row items-center justify-center"
+          style={{ width: screenWidth, height: 50, zIndex: 100, top: insets.top }}
+        >
+          <MaterialIcons
+            name="arrow-back"
+            size={24}
+            color="#fafafa"
+            onPress={() => router.push(SITEMAP.MY_PAGE_SCRAP)}
+            className="absolute left-4"
+          />
+          <Text className="typography-sub-title">스크랩 목록</Text>
+        </View>
+
         {/* 메인 아이템들 */}
         <Animated.View style={[{ position: "absolute", width: "100%" }, animatedStyle]}>
           {articles &&
