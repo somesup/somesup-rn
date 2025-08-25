@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Some's up",
-    "slug": "Some's up",
+    "slug": "somes-up",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/favicon.png",
@@ -27,7 +27,19 @@
       "favicon": "./assets/images/favicon.png",
       "bundler": "metro"
     },
-    "plugins": ["expo-router", "expo-font"],
-    "assetBundlePatterns": ["**/*"]
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "3e90e094-0795-4321-a7d7-ce9328b00c8c"
+      }
+    },
+    "owner": "llddang"
   }
 }
