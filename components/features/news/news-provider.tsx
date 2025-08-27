@@ -111,7 +111,7 @@ const NewsProvider: React.FC<NewsProviderProps> = ({ providers, title }) => {
                       className="text-[#ffffff] typography-caption2 mb-[-7]"
                       numberOfLines={1}
                     >
-                      기사 원제목
+                      {provider.title}
                     </Text>
                     <Text className="text-[#9b9a9a] typography-caption3">
                       {provider.friendlyName}
