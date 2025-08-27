@@ -28,7 +28,7 @@ export type SignInResponseDto = Expand<{
   isCreated: boolean;
 }>;
 
-export type NewsProviderDto = { id: number; name: string; friendlyName: string; newsUrl: string; logoUrl: string };
+export type NewsProviderDto = { id: number; title: string; name: string; friendlyName: string; newsUrl: string; logoUrl: string };
 export type NewsDto = {
   id: number;
   section: { id: number; name: string; friendlyName: string };
