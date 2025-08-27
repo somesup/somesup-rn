@@ -11,6 +11,7 @@ import {
 } from "@/lib/apis/apis";
 import { NewsDto } from "@/types/dto";
 import { MaterialIcons } from "@expo/vector-icons";
+import NewsProvider from "./news-provider";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
@@ -125,7 +126,7 @@ const NewsAbstractView = (news: NewsAbstractViewProps) => {
           <Text className="typography-body2 line-clamp-3 mb-4">{news.oneLineSummary}</Text>
 
           <View className="absolute bottom-10 right-8">
-            <Text className="typography-caption">뉴스 제공사</Text>
+            <NewsProvider providers={news.providers}/>
           </View>
         </View>
       </SafeAreaView>

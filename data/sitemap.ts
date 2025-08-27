@@ -7,7 +7,7 @@ export const SITEMAP = {
   HOME: "/",
   HIGHLIGHT: "/highlight",
   MY_PAGE: "/my-page",
-  MY_PAGE_SCRAP: "/my-page/scrap",
+  MY_PAGE_SCRAP: "/scrap-list",
   SCRAP: "/scrap",
   SET_NICKNAME: "/set-nickname",
   SET_PREFERENCES: "/set-preferences",
