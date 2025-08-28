@@ -7,7 +7,8 @@ import { postArticleEvent } from "@/lib/apis/apis";
 import useFetchArticles from "@/lib/hooks/useFetchArticles";
 import useSwipeGestures from "@/lib/hooks/useSwipeGestures";
 import { useHighlightStore } from "@/lib/stores/highlight";
-import { useEffect } from "react";
+import { useCursorStore } from "@/lib/stores/cursor";
+import { useEffect, useRef } from "react";
 import { View, Dimensions, Image, ActivityIndicator } from "react-native";
 import { GestureDetector } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
@@ -17,8 +18,13 @@ const FETCH_THRESHOLD = 5;
 
 const HomePage = () => {
   const isVisited = useHighlightStore((state) => state.isVisited);
+  const cursor = useRef(useCursorStore.getState().cursor);
+  const setCursor = useCursorStore((state) => state.setCursor);
 
-  const { articles, isNextLoading, pagination, fetchNextArticles } = useFetchArticles(0);
+  const { articles, isNextLoading, pagination, fetchNextArticles } = useFetchArticles(
+    cursor.current,
+    { isMain: true }
+  );
   const { currentIndex, animatedStyle, detailAnimatedStyle, gesture, isDetailOpen } =
     useSwipeGestures({
       itemsLength: articles.length + 1,
@@ -32,11 +38,17 @@ const HomePage = () => {
     });
 
   useEffect(() => {
+    setCursor(cursor.current + currentIndex);
+  }, [currentIndex]);
+
+  useEffect(() => {
     const id = setTimeout(() => {
       if (!isVisited()) toast.fiveNews();
     }, 1000);
 
-    return () => clearTimeout(id);
+    return () => {
+      clearTimeout(id);
+    };
   }, []);
 
   return (

@@ -23,7 +23,6 @@ const pages: Page[] = [
 ];
 
 export default function PageSelector({ style }: { style?: any }) {
-  console.log("PageSelector rendered");
   const router = useRouter();
   const pathname = usePathname();
   const isVisited = useHighlightStore((s) => s.isVisited);

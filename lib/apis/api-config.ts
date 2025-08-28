@@ -1,5 +1,4 @@
 import { router } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { camelize } from "@/lib/utils/camelize";
 import { SITEMAP } from "@/data/sitemap";
 import { APIResult } from "@/types/dto";
@@ -64,6 +63,7 @@ export const myFetch = async <T = any>(
     };
 
     const response = await fetch(API_URL + endpoint, defaultOptions);
+    const xCache = response.headers.get("x-cache");
 
     if (response.status === 401) {
       const newAccessToken = await refreshAccessToken();
@@ -83,6 +83,7 @@ export const myFetch = async <T = any>(
       };
 
       const retryResponse = await fetch(API_URL + endpoint, retryOptions);
+      const retryXCache = retryResponse.headers.get("x-cache");
       const retryResult = await retryResponse.json();
 
       if (!retryResponse.ok) {
@@ -92,7 +93,12 @@ export const myFetch = async <T = any>(
         };
       }
 
-      return { error: null, data: camelize(retryResult.data), pagination: retryResult.pagination };
+      return {
+        error: null,
+        data: camelize(retryResult.data),
+        pagination: retryResult.pagination,
+        xCache: retryXCache,
+      };
     }
 
     const result = await response.json();
@@ -104,7 +110,7 @@ export const myFetch = async <T = any>(
       };
     }
 
-    return { error: null, data: camelize(result.data), pagination: result.pagination };
+    return { error: null, data: camelize(result.data), pagination: result.pagination, xCache };
   } catch (error) {
     console.error(error);
     return {

@@ -2,6 +2,7 @@ import { ArticlesRequestDto, NewsDto } from "@/types/dto";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { getArticles } from "../apis/apis";
 import { toast } from "@/components/ui/toast";
+import { useCursorStore } from "../stores/cursor";
 
 const getCursor = (index: number, prev: boolean, limit: number) => {
   if (prev) {
@@ -18,15 +19,20 @@ const getCursor = (index: number, prev: boolean, limit: number) => {
   return { nextIndex: index + limit, cursor, limit, hasPrev: index > 0 };
 };
 
-const useFetchArticles = (index: number, options?: Omit<ArticlesRequestDto, "cursor">) => {
+const useFetchArticles = (
+  index: number,
+  options?: Omit<ArticlesRequestDto, "cursor"> & { isMain?: boolean }
+) => {
   const [articles, setArticles] = useState<NewsDto[]>([]);
   const [pagination, setPagination] = useState({ hasPrev: index > 0, hasNext: true });
   const [fetchState, setFetchState] = useState({ start: index, end: index });
+  const setCursor = useCursorStore((state) => state.setCursor);
 
   const limit = options?.limit || 15;
   const optionsRef = useRef(options);
   const [isPrevLoading, setIsPrevLoading] = useState(false);
   const [isNextLoading, setIsNextLoading] = useState(false);
+  const isFirstLoaded = useRef(true);
 
   const fetchNextArticles = useCallback(async () => {
     if (isNextLoading || !pagination.hasNext) return 0;
@@ -39,7 +45,10 @@ const useFetchArticles = (index: number, options?: Omit<ArticlesRequestDto, "cur
         error: apiError,
         data,
         pagination: newPagination,
+        xCache,
       } = await getArticles({ cursor, ...options, limit });
+      if (options?.isMain && isFirstLoaded.current && xCache !== "HIT") setCursor(0);
+      isFirstLoaded.current = false;
 
       if (apiError?.status === 401) return 0;
       if (apiError?.status === 404)
@@ -104,8 +113,6 @@ const useFetchArticles = (index: number, options?: Omit<ArticlesRequestDto, "cur
       fetchNextArticles();
     }
   }, [options]);
-
-  // useEffect(() => void fetchNextArticles(), []);
 
   return {
     articles,
