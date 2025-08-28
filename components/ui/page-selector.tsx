@@ -12,6 +12,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useRouter, usePathname } from "expo-router";
 import { useHighlightStore } from "@/lib/stores/highlight";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Page = { href: string; label: string };
 
@@ -30,10 +31,9 @@ export default function PageSelector({ style }: { style?: any }) {
   const [isVisible, setIsVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  const currentPage = useMemo(
-    () => pages.find((p) => p.href === pathname) ?? pages[0],
-    [pathname]
-  );
+  const insets = useSafeAreaInsets();
+
+  const currentPage = useMemo(() => pages.find((p) => p.href === pathname) ?? pages[0], [pathname]);
   const otherPages = useMemo(
     () => pages.filter((p) => p.href !== currentPage.href),
     [currentPage.href]
@@ -92,9 +92,11 @@ export default function PageSelector({ style }: { style?: any }) {
       )}
 
       <View
-        className="absolute top-16 z-50 w-full"
-        style={[{ alignItems: "center" }, style]}
-        pointerEvents="box-none"
+        className="absolute w-full"
+        style={[
+          { alignItems: "center", top: insets.top + 10, zIndex: 1000, elevation: 1000 },
+          style,
+        ]}
       >
         <View style={{ position: "relative" }}>
           <TouchableOpacity
@@ -118,10 +120,7 @@ export default function PageSelector({ style }: { style?: any }) {
                 }}
               />
             )}
-            <Text
-              className="typography-small-title"
-              style={{ color: "#FAFAFA" }}
-            >
+            <Text className="typography-small-title" style={{ color: "#FAFAFA" }}>
               {currentPage.label}
             </Text>
             <View
@@ -164,9 +163,7 @@ export default function PageSelector({ style }: { style?: any }) {
                       minWidth: 140,
                     }}
                   >
-                    <View
-                      style={{ position: "relative", alignItems: "center" }}
-                    >
+                    <View style={{ position: "relative", alignItems: "center" }}>
                       {label === "5분 뉴스" && shouldShowIndicator && (
                         <FontAwesome
                           name="circle"
@@ -180,10 +177,7 @@ export default function PageSelector({ style }: { style?: any }) {
                           }}
                         />
                       )}
-                      <Text
-                        className="typography-small-title"
-                        style={{ color: "#FAFAFA" }}
-                      >
+                      <Text className="typography-small-title" style={{ color: "#FAFAFA" }}>
                         {label}
                       </Text>
                     </View>

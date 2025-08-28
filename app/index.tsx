@@ -1,12 +1,16 @@
 import NewsAbstractView from "@/components/features/news/news-abstract-view";
 import NewsDetailView from "@/components/features/news/news-detail-view";
+import NewsGuide from "@/components/features/news/news-guide";
+import PageSelector from "@/components/ui/page-selector";
 import Text from "@/components/ui/text";
 import { toast } from "@/components/ui/toast";
 import { postArticleEvent } from "@/lib/apis/apis";
 import useFetchArticles from "@/lib/hooks/useFetchArticles";
 import useSwipeGestures from "@/lib/hooks/useSwipeGestures";
 import { useHighlightStore } from "@/lib/stores/highlight";
-import { useEffect } from "react";
+import { useCursorStore } from "@/lib/stores/cursor";
+import { useNewsGuideStore } from "@/lib/stores/news-guide";
+import { useEffect, useRef } from "react";
 import { View, Dimensions, Image, ActivityIndicator } from "react-native";
 import { GestureDetector } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
@@ -16,30 +20,45 @@ const FETCH_THRESHOLD = 5;
 
 const HomePage = () => {
   const isVisited = useHighlightStore((state) => state.isVisited);
+  const cursor = useRef(useCursorStore.getState().cursor);
+  const setCursor = useCursorStore((state) => state.setCursor);
+  const isNewsGuideViewed = useNewsGuideStore((state) => state.viewed);
 
-  const { articles, isNextLoading, pagination, fetchNextArticles } = useFetchArticles(0);
-  const { currentIndex, animatedStyle, detailAnimatedStyle, gesture } = useSwipeGestures({
-    itemsLength: articles.length + 1,
-    onItemChange: async (index: number) => {
-      if (articles[index]?.id) postArticleEvent(articles[index].id, "VIEW");
-      if (articles.length - index <= FETCH_THRESHOLD && !isNextLoading && pagination.hasNext)
-        fetchNextArticles();
-    },
-    onDetailToggle: (index: number, isDetail: boolean) =>
-      isDetail && articles[index]?.id && postArticleEvent(articles[index].id, "DETAIL_VIEW"),
-  });
+  const { articles, isNextLoading, pagination, fetchNextArticles } = useFetchArticles(
+    cursor.current,
+    { isMain: true }
+  );
+  const { currentIndex, animatedStyle, detailAnimatedStyle, gesture, isDetailOpen } =
+    useSwipeGestures({
+      itemsLength: articles.length + 1,
+      onItemChange: async (index: number) => {
+        if (articles[index]?.id) postArticleEvent(articles[index].id, "VIEW");
+        if (articles.length - index <= FETCH_THRESHOLD && !isNextLoading && pagination.hasNext)
+          fetchNextArticles();
+      },
+      onDetailToggle: (index: number, isDetail: boolean) =>
+        isDetail && articles[index]?.id && postArticleEvent(articles[index].id, "DETAIL_VIEW"),
+    });
+
+  useEffect(() => {
+    setCursor(cursor.current + currentIndex);
+  }, [currentIndex]);
 
   useEffect(() => {
     const id = setTimeout(() => {
       if (!isVisited()) toast.fiveNews();
     }, 1000);
 
-    return () => clearTimeout(id);
+    return () => {
+      clearTimeout(id);
+    };
   }, []);
 
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View style={{ flex: 1 }}>
+        <PageSelector style={{ opacity: isDetailOpen ? 0 : 1 }} />
+        {!isNewsGuideViewed && <NewsGuide />}
         {/* 메인 아이템들 */}
         <Animated.View style={[{ position: "absolute", width: "100%" }, animatedStyle]}>
           {articles &&
