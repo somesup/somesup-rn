@@ -12,6 +12,7 @@ import {
 import type { NewsProviderDto } from "@/types/dto";
 import { MaterialIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type NewsProviderProps = {
   providers: NewsProviderDto[];
@@ -22,10 +23,10 @@ const ITEM_HEIGHT = 60;
 
 const NewsProvider: React.FC<NewsProviderProps> = ({ providers, title }) => {
   const [open, setOpen] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const uniqueProviders = providers.filter(
-    (provider, index, self) =>
-      index === self.findIndex((p) => p.id === provider.id)
+    (provider, index, self) => index === self.findIndex((p) => p.id === provider.id)
   );
 
   return (
@@ -47,19 +48,12 @@ const NewsProvider: React.FC<NewsProviderProps> = ({ providers, title }) => {
         </View>
       </Pressable>
 
-      <Modal
-        visible={open}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setOpen(false)}
-      >
-        <Pressable
-          onPress={() => setOpen(false)}
-          className="flex-1 bg-[#17171742] justify-end"
-        >
+      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
+        <Pressable onPress={() => setOpen(false)} className="flex-1 bg-[#17171742] justify-end">
           <Pressable
             onPress={(e) => e.stopPropagation()}
             className="bg-[#2b2b2b] rounded-t-2xl p-4 w-full"
+            style={{ paddingBottom: insets.bottom + 10 }}
           >
             <View className="flex-row justify-between items-center mb-3">
               <View className="flex-row items-center pl-2">
@@ -69,9 +63,7 @@ const NewsProvider: React.FC<NewsProviderProps> = ({ providers, title }) => {
                   color="#FAFAFA"
                   style={{ marginRight: 6 }}
                 />
-                <Text className="text-white typography-caption3">
-                  아래 뉴스들을 종합했어요!
-                </Text>
+                <Text className="text-white typography-caption3">아래 뉴스들을 종합했어요!</Text>
               </View>
               <Pressable onPress={() => setOpen(false)}>
                 <MaterialIcons name="close" size={24} color="#FAFAFA" />
@@ -107,10 +99,7 @@ const NewsProvider: React.FC<NewsProviderProps> = ({ providers, title }) => {
                     />
                   </View>
                   <View className="flex-1 ml-1">
-                    <Text
-                      className="text-[#ffffff] typography-caption2 mb-[-7]"
-                      numberOfLines={1}
-                    >
+                    <Text className="text-[#ffffff] typography-caption2 mb-[-7]" numberOfLines={1}>
                       {provider.title}
                     </Text>
                     <Text className="text-[#9b9a9a] typography-caption3">

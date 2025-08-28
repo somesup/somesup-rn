@@ -12,6 +12,7 @@ import {
 import { NewsDto } from "@/types/dto";
 import { MaterialIcons } from "@expo/vector-icons";
 import NewsProvider from "./news-provider";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
@@ -24,6 +25,7 @@ const NewsAbstractView = (news: NewsAbstractViewProps) => {
   const [isLiked, setIsLiked] = useState(news.like.isLiked);
   const [likeCount, setLikeCount] = useState(news.like.count);
   const [isScraped, setIsScrapped] = useState(news.scrap.isScraped);
+  const insets = useSafeAreaInsets();
 
   const handleToggleLike = async () => {
     if (isLiked) {
@@ -90,7 +92,10 @@ const NewsAbstractView = (news: NewsAbstractViewProps) => {
           className="w-full flex-1 mb-72 "
           resizeMode="contain"
         />
-        <View className="absolute bottom-0 w-full px-8 pb-10">
+        <View
+          className="absolute bottom-0 w-full px-8 "
+          style={{ paddingBottom: insets.bottom + 10 }}
+        >
           <View className="flex-row items-baseline justify-between gap-4">
             <View className="flex-1">
               <View className="rounded-2xl border border-gray-60 px-2 self-start mb-2">
@@ -121,12 +126,10 @@ const NewsAbstractView = (news: NewsAbstractViewProps) => {
             </View>
           </View>
 
-          <View className="h-px bg-gray-60 my-4" />
-
+          <View className="h-px bg-gray-60" />
           <Text className="typography-body2 line-clamp-3 mb-4">{news.oneLineSummary}</Text>
-
-          <View className="absolute bottom-10 right-8">
-            <NewsProvider providers={news.providers}/>
+          <View className="flex items-end">
+            <NewsProvider providers={news.providers} />
           </View>
         </View>
       </SafeAreaView>
