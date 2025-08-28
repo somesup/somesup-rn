@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View } from "react-native";
 import { Animated } from "react-native";
 import Button from "@/components/ui/button";
@@ -45,6 +45,14 @@ const SetPreferenceFirstPage = ({ onConfirm }: SetPreferenceFirstPageProps) => {
     });
   };
 
+  useEffect(() => {
+    const id = setTimeout(() => {
+      handleStartClick();
+    }, 1000);
+
+    return () => clearTimeout(id);
+  }, []);
+
   return (
     <View className="flex-1 w-full overflow-hidden px-[32px] py-[16px]">
       <View className="relative flex-1 w-full pb-[80px]">
@@ -61,11 +69,6 @@ const SetPreferenceFirstPage = ({ onConfirm }: SetPreferenceFirstPageProps) => {
             <Hexagon hexagons={[{ radii }]} withLabel={withLabel} />
           </Animated.View>
         </View>
-      </View>
-      <View className="relative w-full">
-        <Button onPress={handleStartClick} className="absolute bottom-[16px]">
-          시작하기
-        </Button>
       </View>
     </View>
   );
