@@ -15,6 +15,7 @@ type highlightStore = {
   lastVisit: string;
   setLastVisitNow: () => void;
   isVisited: () => boolean;
+  init: () => void;
 };
 
 export const initialHighlight = {
@@ -28,6 +29,11 @@ export const useHighlightStore = create<highlightStore>()(
       setLastVisitNow: () =>
         set((state) => {
           state.lastVisit = getTodayString();
+          return state;
+        }),
+      init: () =>
+        set((state) => {
+          state.lastVisit = "";
           return state;
         }),
       isVisited: () => {

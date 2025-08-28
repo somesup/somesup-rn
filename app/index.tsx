@@ -1,5 +1,6 @@
 import NewsAbstractView from "@/components/features/news/news-abstract-view";
 import NewsDetailView from "@/components/features/news/news-detail-view";
+import PageSelector from "@/components/ui/page-selector";
 import Text from "@/components/ui/text";
 import { toast } from "@/components/ui/toast";
 import { postArticleEvent } from "@/lib/apis/apis";
@@ -18,16 +19,17 @@ const HomePage = () => {
   const isVisited = useHighlightStore((state) => state.isVisited);
 
   const { articles, isNextLoading, pagination, fetchNextArticles } = useFetchArticles(0);
-  const { currentIndex, animatedStyle, detailAnimatedStyle, gesture } = useSwipeGestures({
-    itemsLength: articles.length + 1,
-    onItemChange: async (index: number) => {
-      if (articles[index]?.id) postArticleEvent(articles[index].id, "VIEW");
-      if (articles.length - index <= FETCH_THRESHOLD && !isNextLoading && pagination.hasNext)
-        fetchNextArticles();
-    },
-    onDetailToggle: (index: number, isDetail: boolean) =>
-      isDetail && articles[index]?.id && postArticleEvent(articles[index].id, "DETAIL_VIEW"),
-  });
+  const { currentIndex, animatedStyle, detailAnimatedStyle, gesture, isDetailOpen } =
+    useSwipeGestures({
+      itemsLength: articles.length + 1,
+      onItemChange: async (index: number) => {
+        if (articles[index]?.id) postArticleEvent(articles[index].id, "VIEW");
+        if (articles.length - index <= FETCH_THRESHOLD && !isNextLoading && pagination.hasNext)
+          fetchNextArticles();
+      },
+      onDetailToggle: (index: number, isDetail: boolean) =>
+        isDetail && articles[index]?.id && postArticleEvent(articles[index].id, "DETAIL_VIEW"),
+    });
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -40,6 +42,7 @@ const HomePage = () => {
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View style={{ flex: 1 }}>
+        <PageSelector style={{ opacity: isDetailOpen ? 0 : 1 }} />
         {/* 메인 아이템들 */}
         <Animated.View style={[{ position: "absolute", width: "100%" }, animatedStyle]}>
           {articles &&

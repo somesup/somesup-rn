@@ -1,5 +1,6 @@
 import NewsAbstractView from "@/components/features/news/news-abstract-view";
 import NewsDetailView from "@/components/features/news/news-detail-view";
+import PageSelector from "@/components/ui/page-selector";
 import Text from "@/components/ui/text";
 import { SITEMAP } from "@/data/sitemap";
 import { postArticleEvent } from "@/lib/apis/apis";
@@ -21,17 +22,18 @@ const HighlightPage = () => {
   const { articles, isNextLoading, pagination, fetchNextArticles } = useFetchArticles(0, {
     highlight: true,
   });
-  const { currentIndex, animatedStyle, detailAnimatedStyle, gesture } = useSwipeGestures({
-    itemsLength: articles.length + 1,
-    onItemChange: async (index: number) => {
-      if (articles[index]?.id) postArticleEvent(articles[index].id, "VIEW");
-      if (articles.length - index <= FETCH_THRESHOLD && !isNextLoading && pagination.hasNext)
-        fetchNextArticles();
-    },
-    onDetailToggle: (index: number, isDetail: boolean) =>
-      isDetail && articles[index]?.id && postArticleEvent(articles[index].id, "DETAIL_VIEW"),
-    onEndReached: () => router.push(SITEMAP.HOME),
-  });
+  const { currentIndex, animatedStyle, detailAnimatedStyle, gesture, isDetailOpen } =
+    useSwipeGestures({
+      itemsLength: articles.length + 1,
+      onItemChange: async (index: number) => {
+        if (articles[index]?.id) postArticleEvent(articles[index].id, "VIEW");
+        if (articles.length - index <= FETCH_THRESHOLD && !isNextLoading && pagination.hasNext)
+          fetchNextArticles();
+      },
+      onDetailToggle: (index: number, isDetail: boolean) =>
+        isDetail && articles[index]?.id && postArticleEvent(articles[index].id, "DETAIL_VIEW"),
+      onEndReached: () => router.push(SITEMAP.HOME),
+    });
 
   useEffect(() => {
     setLastVisitNow();
@@ -39,6 +41,7 @@ const HighlightPage = () => {
 
   return (
     <GestureDetector gesture={gesture}>
+      <PageSelector style={{ opacity: isDetailOpen ? 0 : 1 }} />
       <Animated.View style={{ flex: 1 }}>
         {/* 메인 아이템들 */}
         <Animated.View style={[{ position: "absolute", width: "100%" }, animatedStyle]}>
