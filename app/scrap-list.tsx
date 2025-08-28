@@ -56,16 +56,10 @@ export default function ScrapsPage() {
   return (
     <SafeAreaView className="flex-1 bg-[#1F1F1F]">
       <View className="flex-row items-center justify-center px-4 h-20 relative">
-        <Pressable
-          onPress={() => router.back()}
-          className="absolute left-4"
-          hitSlop={30}
-        >
+        <Pressable onPress={() => router.back()} className="absolute left-4" hitSlop={30}>
           <MaterialIcons name="chevron-left" size={30} color="#FAFAFA" />
         </Pressable>
-        <Text className="typography-small-title text-[#FAFAFA]">
-          스크랩 목록
-        </Text>
+        <Text className="typography-small-title text-[#FAFAFA]">스크랩 목록</Text>
       </View>
 
       {items.length === 0 && !loading ? (

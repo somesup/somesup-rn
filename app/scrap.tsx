@@ -2,7 +2,6 @@ import NewsAbstractView from "@/components/features/news/news-abstract-view";
 import NewsDetailView from "@/components/features/news/news-detail-view";
 import Button from "@/components/ui/button";
 import Text from "@/components/ui/text";
-import { SITEMAP } from "@/data/sitemap";
 import { postArticleEvent } from "@/lib/apis/apis";
 import useFetchArticles from "@/lib/hooks/useFetchArticles";
 import useSwipeGestures from "@/lib/hooks/useSwipeGestures";
@@ -47,7 +46,7 @@ const ScrapPage = () => {
     },
     onDetailToggle: (index: number, isDetail: boolean) =>
       isDetail && articles[index]?.id && postArticleEvent(articles[index].id, "DETAIL_VIEW"),
-    onEndReached: () => router.push(SITEMAP.MY_PAGE_SCRAP),
+    onEndReached: () => router.back(),
   });
 
   return (
@@ -61,7 +60,7 @@ const ScrapPage = () => {
             name="arrow-back"
             size={24}
             color="#fafafa"
-            onPress={() => router.push(SITEMAP.MY_PAGE_SCRAP)}
+            onPress={() => router.back()}
             className="absolute left-4"
           />
           <Text className="typography-sub-title">스크랩 목록</Text>
@@ -94,7 +93,7 @@ const ScrapPage = () => {
                 style={{ width: 280, height: 280 }}
               />
               <Button
-                onPress={() => router.push(SITEMAP.MY_PAGE_SCRAP)}
+                onPress={() => router.back()}
                 className="absolute"
                 style={{
                   bottom: insets.bottom + 20,

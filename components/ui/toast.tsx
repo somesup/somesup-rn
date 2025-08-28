@@ -27,7 +27,10 @@ const ToastContainer = () => {
   const toasts = useToastStore((state) => state.toasts);
 
   return (
-    <SafeAreaView className="absolute flex-col gap-[12px] p-[16px] left-0 right-0 top-0 z-40">
+    <SafeAreaView
+      className="absolute flex-col gap-[12px] px-[16px] py-0 left-0 right-0 z-10"
+      pointerEvents="box-none"
+    >
       {toasts.map((t) => (
         <ToastItem key={t.id} {...t} />
       ))}
