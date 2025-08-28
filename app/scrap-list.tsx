@@ -5,6 +5,7 @@ import {
   FlatList,
   Pressable,
   ActivityIndicator,
+  useWindowDimensions,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
@@ -14,8 +15,14 @@ import { getScrapedArticles } from "@/lib/apis/apis";
 import ArticleCard from "@/components/features/my-page/article-card";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const H_PADDING = 16;
+const GAP = 12;
+
 export default function ScrapsPage() {
   const router = useRouter();
+  const { width: screenWidth } = useWindowDimensions();
+  const cardWidth = Math.floor((screenWidth - H_PADDING * 2 - GAP) / 2);
+
   const [items, setItems] = useState<NewsDto[]>([]);
   const [cursor, setCursor] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
@@ -43,7 +50,7 @@ export default function ScrapsPage() {
   }, []);
 
   const renderItem = ({ item, index }: { item: NewsDto; index: number }) => (
-    <ArticleCard article={item} index={index} />
+    <ArticleCard article={item} index={index} cardWidth={cardWidth} />
   );
 
   return (
@@ -74,8 +81,12 @@ export default function ScrapsPage() {
           renderItem={renderItem}
           keyExtractor={(item) => String(item.id)}
           numColumns={2}
-          columnWrapperStyle={{ gap: 12 }}
-          contentContainerStyle={{ padding: 16, gap: 12 }}
+          columnWrapperStyle={{ gap: GAP, justifyContent: "flex-start" }}
+          contentContainerStyle={{
+            paddingHorizontal: H_PADDING,
+            paddingVertical: 16,
+            rowGap: GAP,
+          }}
           onEndReached={fetchMore}
           onEndReachedThreshold={0.5}
           ListFooterComponent={
@@ -89,6 +100,7 @@ export default function ScrapsPage() {
               </Text>
             ) : null
           }
+          removeClippedSubviews
         />
       )}
     </SafeAreaView>
