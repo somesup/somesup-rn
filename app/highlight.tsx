@@ -41,8 +41,8 @@ const HighlightPage = () => {
 
   return (
     <GestureDetector gesture={gesture}>
-      <PageSelector style={{ opacity: isDetailOpen ? 0 : 1 }} />
       <Animated.View style={{ flex: 1 }}>
+        <PageSelector style={{ opacity: isDetailOpen ? 0 : 1 }} />
         {/* 메인 아이템들 */}
         <Animated.View style={[{ position: "absolute", width: "100%" }, animatedStyle]}>
           {articles &&

@@ -24,17 +24,33 @@ const HomePage = () => {
   const setCursor = useCursorStore((state) => state.setCursor);
   const isNewsGuideViewed = useNewsGuideStore((state) => state.viewed);
 
-  const { articles, isNextLoading, pagination, fetchNextArticles } = useFetchArticles(
-    cursor.current,
-    { isMain: true }
-  );
+  const {
+    articles,
+    isNextLoading,
+    isPrevLoading,
+    pagination,
+    fetchNextArticles,
+    fetchPrevArticles,
+  } = useFetchArticles(cursor.current, { isMain: true });
   const { currentIndex, animatedStyle, detailAnimatedStyle, gesture, isDetailOpen } =
     useSwipeGestures({
       itemsLength: articles.length + 1,
-      onItemChange: async (index: number) => {
+      onItemChange: async (
+        index: number,
+        goToItem: (index: number, animated?: boolean) => void
+      ) => {
         if (articles[index]?.id) postArticleEvent(articles[index].id, "VIEW");
+
         if (articles.length - index <= FETCH_THRESHOLD && !isNextLoading && pagination.hasNext)
           fetchNextArticles();
+
+        if (index <= FETCH_THRESHOLD && !isPrevLoading && pagination.hasPrev) {
+          const addedCount = await fetchPrevArticles();
+          if (addedCount > 0) {
+            cursor.current -= addedCount;
+            goToItem(currentIndex + addedCount, false);
+          }
+        }
       },
       onDetailToggle: (index: number, isDetail: boolean) =>
         isDetail && articles[index]?.id && postArticleEvent(articles[index].id, "DETAIL_VIEW"),
